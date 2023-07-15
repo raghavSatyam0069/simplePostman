@@ -28,15 +28,14 @@ app.post("/myServer/allRequests", async (req, res) => {
   let token = req.header("authorization");
   let body = req.body;
   console.log(body);
-
   try {
     if (body.method === "GET") {
       let response = await axios.get(body.fetchURL, {
         headers: { authorization: token },
       });
-      console.log("" + response.data);
-      res.send("" + response.data);
-    } else {
+      // console.log(response.data);
+      res.send(response.data);
+    } else if (body.method === "POST") {
       let response = await axios.post(body.fetchURL, body.data, {
         headers: { authorization: token },
       });
@@ -45,6 +44,7 @@ app.post("/myServer/allRequests", async (req, res) => {
     }
   } catch (ex) {
     if (ex.response) {
+      console.log(ex.response);
       let { status, statusText } = ex.response;
       console.log(status, statusText);
       res.status(status).send(statusText);
